@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>План запуска: лазерная гравировка по фанере</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#00562D; --beige:#F5F5DC; --accent:#4a7c59;
+  --line:rgba(0,86,45,.10); --line2:rgba(0,86,45,.2);
+  --shadow:0 4px 20px -2px rgba(0,0,0,.05);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,sans-serif;background:var(--beige);color:var(--green);-webkit-font-smoothing:antialiased;overflow-x:clip;line-height:1.55}
+::selection{background:var(--green);color:var(--beige)}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+
+/* progress + nav */
+#bar{position:fixed;top:0;left:0;height:3px;width:0;background:var(--green);z-index:60;transition:width .1s}
+nav{position:sticky;top:0;z-index:50;background:rgba(245,245,220,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:6px;overflow-x:auto;padding-top:12px;padding-bottom:12px;scrollbar-width:none}
+nav .wrap::-webkit-scrollbar{display:none}
+nav a{white-space:nowrap;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;border-radius:999px;transition:.25s}
+nav a:hover,nav a.on{background:var(--green);color:var(--beige)}
+
+/* hero */
+.hero{position:relative;padding:96px 0 72px;overflow:hidden}
+.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;background:var(--green);opacity:.06;filter:blur(2px);animation:float 14s ease-in-out infinite}
+.hero:before{width:420px;height:420px;right:-120px;top:-100px}
+.hero:after{width:260px;height:260px;left:-80px;bottom:-60px;animation-delay:-6s}
+@keyframes float{50%{transform:translate(-24px,30px) scale(1.06)}}
+.tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:8px 16px;border:1px solid var(--line2);border-radius:999px;background:rgba(255,255,255,.5)}
+h1{font-size:clamp(40px,7vw,84px);font-weight:900;letter-spacing:-.035em;line-height:1.02;margin:24px 0 20px}
+h1 span{color:var(--accent)}
+.lead{font-size:clamp(17px,2vw,21px);max-width:680px;opacity:.85;font-weight:500}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;margin-top:48px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:var(--shadow);transition:.3s}
+.stat:hover{transform:translateY(-4px);box-shadow:0 14px 34px -10px rgba(0,86,45,.22)}
+.stat b{display:block;font-size:44px;font-weight:900;letter-spacing:-.03em;line-height:1}
+.stat span{font-size:13px;font-weight:600;opacity:.7;display:block;margin-top:8px}
+
+/* sections */
+section{padding:72px 0}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;opacity:.6}
+h2{font-size:clamp(30px,4.4vw,52px);font-weight:900;letter-spacing:-.03em;line-height:1.08;margin:10px 0 16px}
+.sub{max-width:640px;opacity:.8;font-weight:500;margin-bottom:36px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.card{background:#fff;border:1px solid var(--line);border-radius:24px;padding:26px;box-shadow:var(--shadow);transition:.3s}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 34px -10px rgba(0,86,45,.2)}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:8px}
+.card p,.card li{font-size:15px;opacity:.82}
+.card ul{padding-left:18px;display:grid;gap:6px}
+.dark{background:var(--green);color:var(--beige);border-color:var(--green)}
+.dark p,.dark li{opacity:.9}
+.chip{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:5px 11px;border-radius:999px;background:rgba(0,86,45,.1);margin-bottom:12px}
+.dark .chip{background:rgba(245,245,220,.18)}
+
+/* marquee */
+.marquee{overflow:hidden;padding:18px 0;border-block:1px solid var(--line);background:rgba(255,255,255,.4);
+  -webkit-mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent)}
+.track{display:flex;gap:14px;width:max-content;animation:mq 60s linear infinite}
+.marquee:hover .track{animation-play-state:paused}
+.track span{white-space:nowrap;font-weight:700;font-size:15px;padding:10px 20px;border:1px solid var(--line2);border-radius:999px;background:#fff}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* catalog */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.tabs button{font:inherit;font-size:13px;font-weight:700;color:var(--green);background:#fff;border:1px solid var(--line2);padding:10px 16px;border-radius:999px;cursor:pointer;transition:.25s}
+.tabs button:hover{background:rgba(0,86,45,.08)}
+.tabs button.on{background:var(--green);color:var(--beige);border-color:var(--green)}
+.items{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.item{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;display:flex;flex-direction:column;justify-content:space-between;gap:14px;min-height:112px;animation:pop .45s both;transition:.25s}
+.item:hover{transform:translateY(-3px);border-color:var(--line2)}
+.item small{font-size:11px;font-weight:700;opacity:.5;letter-spacing:.1em}
+.item b{font-size:15px;font-weight:700;line-height:1.3;display:block;margin-top:2px}
+.item em{font-style:normal;font-weight:900;font-size:15px;color:var(--accent)}
+@keyframes pop{from{opacity:0;transform:translateY(12px) scale(.97)}}
+.note{font-size:13px;opacity:.65;margin-top:18px}
+
+/* timeline */
+.tl{position:relative;display:grid;gap:22px;padding-left:44px}
+.tl:before{content:"";position:absolute;left:15px;top:8px;bottom:8px;width:2px;background:var(--line2)}
+.tl .fill{position:absolute;left:15px;top:8px;width:2px;height:0;background:var(--green);transition:height .2s}
+.wk{position:relative}
+.wk .dot{position:absolute;left:-44px;top:26px;width:32px;height:32px;border-radius:50%;background:var(--beige);border:2px solid var(--green);display:grid;place-items:center;font-weight:900;font-size:13px;transition:.4s}
+.wk.in .dot{background:var(--green);color:var(--beige);transform:scale(1.08)}
+.wk .when{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.6}
+.wk h3{font-size:24px;font-weight:900;letter-spacing:-.02em;margin:4px 0 12px}
+.wk .res{margin-top:14px;padding:12px 16px;border-radius:14px;background:rgba(0,86,45,.07);font-size:14px;font-weight:600}
+
+/* table-ish rows */
+.rows{display:grid;gap:10px}
+.row{display:flex;justify-content:space-between;gap:16px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 20px;transition:.25s}
+.row:hover{border-color:var(--line2);transform:translateX(4px)}
+.row b{font-weight:700}
+.row span{font-size:14px;opacity:.75;text-align:right}
+.big{font-size:56px;font-weight:900;letter-spacing:-.03em;line-height:1}
+
+/* checklist */
+.chk{display:grid;gap:10px}
+.chk label{display:flex;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 20px;cursor:pointer;font-weight:600;transition:.25s}
+.chk label:hover{border-color:var(--line2)}
+.chk input{appearance:none;width:24px;height:24px;border-radius:8px;border:2px solid var(--green);display:grid;place-items:center;flex:none;transition:.2s;cursor:pointer}
+.chk input:checked{background:var(--green)}
+.chk input:checked:after{content:"";width:6px;height:11px;border:solid var(--beige);border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.chk input:checked+span{opacity:.45;text-decoration:line-through}
+
+footer{padding:56px 0 80px;text-align:center;font-size:13px;font-weight:600;opacity:.6}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .rv{opacity:1;transform:none}
+}
+@media(max-width:560px){.tl{padding-left:38px}.wk .dot{left:-38px;width:28px;height:28px}.tl:before,.tl .fill{left:13px}}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+
+<nav><div class="wrap">
+  <a href="#top">Начало</a><a href="#goal">Цель</a><a href="#norms">Нормы</a><a href="#catalog">Каталог</a>
+  <a href="#plan">План</a><a href="#pdd">Pinduoduo</a><a href="#kpi">Показатели</a><a href="#todo">Чек-лист</a>
+</div></nav>
+
+<header class="hero" id="top"><div class="wrap">
+  <span class="tag rv">25 ноября - 31 декабря 2026</span>
+  <h1 class="rv">Лазерная гравировка<br>по фанере: <span>запуск до Нового года</span></h1>
+  <p class="lead rv">Свои изделия на станке плюс нишевые товары с Pinduoduo. Продаём через Instagram, Threads и Kaspi, собираем отзывы и к 1 января понимаем, что работает лучше всего.</p>
+  <div class="stats">
+    <div class="stat rv"><b data-n="5">0</b><span>недель до 1 января</span></div>
+    <div class="stat rv"><b data-n="52">0</b><span>изделия в каталоге</span></div>
+    <div class="stat rv"><b data-n="40">0</b><span>брелков с одного листа</span></div>
+    <div class="stat rv"><b data-n="10">0</b><span>дней доставки максимум</span></div>
+  </div>
+</div></header>
+
+<div class="marquee" aria-hidden="true"><div class="track" id="mq"></div></div>
+
+<section id="goal"><div class="wrap">
+  <div class="eyebrow rv">01 / Цель</div>
+  <h2 class="rv">Три результата к 1 января</h2>
+  <p class="sub rv">Запускаем линейку из фанеры и параллельно проверяем товары с Pinduoduo в трёх нишах: брелки, постеры и фоны, светильники.</p>
+  <div class="grid g3">
+    <div class="card dark rv"><span class="chip">Результат 1</span><h3>Первые продажи</h3><p>Заказы через соцсети и Kaspi, отзывы и фото покупателей.</p></div>
+    <div class="card rv"><span class="chip">Результат 2</span><h3>Рабочие товары</h3><p>Понимаем, какие вещи с Pinduoduo реально продаются и дают маржу.</p></div>
+    <div class="card rv"><span class="chip">Результат 3</span><h3>Своя ниша</h3><p>Видим, какая категория лучше всего подходит нашему стилю.</p></div>
+  </div>
+  <div class="grid g2" style="margin-top:16px">
+    <div class="card rv"><h3>Что уже есть</h3><ul><li>Лазерный станок и фанера</li><li>Образцы: постер (контурный арт) и брелок</li><li>Опыт сборных слоёных моделей, шип-паз</li><li>Готовая модель мини-сундучка</li></ul></div>
+    <div class="card rv"><h3>Что в процессе</h3><ul><li>ИП открыто</li><li>Доступ к Kaspi откроется через 19 дней, около 14 декабря</li><li>Подбор товара для закупа с Pinduoduo</li><li>Instagram запускаем с нуля</li></ul></div>
+  </div>
+</div></section>
+
+<section id="norms" style="padding-top:24px"><div class="wrap">
+  <div class="eyebrow rv">02 / Производство</div>
+  <h2 class="rv">Нормы и файлы</h2>
+  <div class="grid g3">
+    <div class="card dark rv"><span class="chip">Брелки</span><div class="big">40</div><p style="margin-top:8px">штук с одного листа фанеры</p></div>
+    <div class="card rv"><span class="chip">Постеры</span><div class="big">2</div><p style="margin-top:8px">штуки на один эскиз, эскизов делаем несколько</p></div>
+    <div class="card rv"><span class="chip">Остальное</span><div class="big">...</div><p style="margin-top:8px">норму фиксируем после пробной вырезки</p></div>
+  </div>
+  <div class="rows" style="margin-top:16px">
+    <div class="row rv"><b>Макеты и превью</b><span>JPG</span></div>
+    <div class="row rv"><b>Рабочие файлы станка</b><span>RLD, сохраняется в RDWorks после импорта макета</span></div>
+  </div>
+</div></section>
+
+<section id="catalog"><div class="wrap">
+  <div class="eyebrow rv">03 / Каталог</div>
+  <h2 class="rv">52 изделия</h2>
+  <p class="sub rv">44 делаем сами на станке, 8 позиций закупаем на Pinduoduo. Выбери категорию.</p>
+  <div class="tabs rv" id="tabs"></div>
+  <div class="items" id="items"></div>
+  <p class="note">Цены в тенге, это рабочие ориентиры. Перед запуском сверяются с реальными карточками на Kaspi и Pinduoduo.</p>
+</div></section>
+
+<section id="plan"><div class="wrap">
+  <div class="eyebrow rv">04 / План</div>
+  <h2 class="rv">Пять недель по порядку</h2>
+  <p class="sub rv">От первых образцов до итогового отчёта 31 декабря. Прокручивай, линия заполняется по ходу.</p>
+  <div class="tl" id="tl"><div class="fill" id="fill"></div>
+
+    <article class="wk rv"><div class="dot">1</div><div class="card"><div class="when">25 ноября - 1 декабря</div><h3>Линейка и закуп</h3>
+      <ul><li>3 пробных изделия: ёлочная игрушка, слоёный ночник, брелок. Модульная башня как витринный образец</li>
+      <li>Тестовая вырезка каждого изделия: зазор под штифты и поправка на ширину пропила</li>
+      <li>Записываем параметры станка отдельно для вырезки и гравировки</li>
+      <li>Разведка на Pinduoduo: 20-30 карточек по брелкам, постерам, светильникам и новогодним вещам</li>
+      <li>Первый заказ на Pinduoduo: комплектующие и пробная партия на перепродажу. Доставка до 10 дней успевает к началу продаж на Kaspi</li></ul>
+      <div class="res">Результат: 3 образца, таблица параметров, оформленный заказ</div></div></article>
+
+    <article class="wk rv"><div class="dot">2</div><div class="card"><div class="when">2 - 8 декабря</div><h3>Производство и контент</h3>
+      <ul><li>Партия: 80 брелков (2 листа), новогодние игрушки, 5-7 ночников, постеры по 2 шт. на эскиз</li>
+      <li>Считаем реальную себестоимость каждого изделия</li>
+      <li>День съёмки: светлый фон, по 5 фото на изделие и короткое видео гравировки</li>
+      <li>Запуск Instagram: 3 поста в неделю</li>
+      <li>Принимаем первую часть заказа с Pinduoduo</li></ul>
+      <div class="res">Результат: первая партия, фотоконтент, себестоимость, комплектующие на руках</div></div></article>
+
+    <article class="wk rv"><div class="dot">3</div><div class="card"><div class="when">9 - 15 декабря</div><h3>Продажи до Kaspi и карточки</h3>
+      <ul><li>Продаём через Instagram, Threads и знакомых: цель 10-15 заказов и первые отзывы</li>
+      <li>Проверяем и фотографируем товары с Pinduoduo</li>
+      <li>Карточки Kaspi: название, описание, 5-7 фото, размеры, срок изготовления</li>
+      <li>К 14 декабря склад: 40-60 единиц готового товара плюс закупленные позиции</li>
+      <li>В день открытия Kaspi заливаем все карточки сразу</li></ul>
+      <div class="res">Результат: первые продажи, готовые карточки, склад</div></div></article>
+
+    <article class="wk rv"><div class="dot">4</div><div class="card"><div class="when">16 - 22 декабря</div><h3>Kaspi на полной скорости</h3>
+      <ul><li>Следим за остатками и вопросами покупателей, упаковка и отправка в день заказа</li>
+      <li>Дозаказ по лидерам: обычно это именные игрушки и подарочные наборы</li>
+      <li>Instagram в минимальном режиме: 3 поста в неделю</li></ul>
+      <div class="res">Результат: стабильный поток заказов, видно лидеров</div></div></article>
+
+    <article class="wk rv"><div class="dot">5</div><div class="card"><div class="when">23 - 31 декабря</div><h3>Хвост и итоги</h3>
+      <ul><li>До 26-28 декабря отгружаем последние заказы с учётом доставки по Казахстану</li>
+      <li>После этого новогодние позиции уходят с первого плана на Kaspi</li>
+      <li>29-31 декабря итоги: что продано, маржа по каждому изделию, что с Pinduoduo зашло, решение по январю</li></ul>
+      <div class="res">Результат: итоговый отчёт и план на январь</div></div></article>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="eyebrow rv">05 / Экономика</div>
+  <h2 class="rv">Из чего складывается цена</h2>
+  <div class="grid g3">
+    <div class="card rv"><span class="chip">Свои изделия</span><ul><li>Фанера: цена листа, делённая на выработку</li><li>Время станка: вырезка и гравировка</li><li>Комплектующие и упаковка</li></ul></div>
+    <div class="card rv"><span class="chip">Товары Pinduoduo</span><ul><li>Цена закупа и карго</li><li>Упаковка</li><li>Комиссия Kaspi и доставка</li></ul></div>
+    <div class="card dark rv"><span class="chip">Правило</span><h3>Цена продажи минимум втрое выше себестоимости</h3><p>Комиссия Kaspi незаметно сжимает маржу, поэтому запас нужен.</p></div>
+  </div>
+</div></section>
+
+<section id="pdd" style="padding-top:24px"><div class="wrap">
+  <div class="eyebrow rv">06 / Pinduoduo и Instagram</div>
+  <h2 class="rv">Как смотрим и как ведём</h2>
+  <div class="grid g2">
+    <div class="card rv"><h3>Что проверяем в карточке Pinduoduo</h3><ul><li>Цена и минимальная партия</li><li>Число покупок и рейтинг</li><li>Срок отправки и доставки через карго</li><li>Отзывы с фото</li><li>Есть ли такой же товар на Kaspi и по какой цене</li></ul></div>
+    <div class="card rv"><h3>Instagram в минимальном режиме</h3><ul><li>3 поста в неделю, один день съёмки на весь контент</li><li>Форматы: гравировка на видео, готовое изделие, сборка набора</li><li>В каждом посте одно действие: написать в директ или перейти на Kaspi</li></ul></div>
+  </div>
+</div></section>
+
+<section id="kpi"><div class="wrap">
+  <div class="eyebrow rv">07 / Показатели</div>
+  <h2 class="rv">Что готово к концу недели</h2>
+  <div class="rows">
+    <div class="row rv"><b>Неделя 1</b><span>3 образца, параметры станка, заказ на Pinduoduo</span></div>
+    <div class="row rv"><b>Неделя 2</b><span>80+ брелков и другие изделия, фото и видео, себестоимость</span></div>
+    <div class="row rv"><b>Неделя 3</b><span>10-15 заказов вне Kaspi, карточки готовы, склад 40-60 шт.</span></div>
+    <div class="row rv"><b>Неделя 4</b><span>Заказы на Kaspi, дозаказ лидеров</span></div>
+    <div class="row rv"><b>Неделя 5</b><span>Отгрузка хвостов, итоговый отчёт</span></div>
+  </div>
+</div></section>
+
+<section id="todo" style="padding-top:24px"><div class="wrap">
+  <div class="eyebrow rv">08 / Ближайшие дни</div>
+  <h2 class="rv">Чек-лист</h2>
+  <div class="chk">
+    <label class="rv"><input type="checkbox"><span>Сделать пробные вырезки трёх изделий</span></label>
+    <label class="rv"><input type="checkbox"><span>Записать параметры станка по каждому материалу</span></label>
+    <label class="rv"><input type="checkbox"><span>Собрать 20-30 карточек нишевых товаров на Pinduoduo</span></label>
+    <label class="rv"><input type="checkbox"><span>Оформить первый заказ на Pinduoduo через карго</span></label>
+    <label class="rv"><input type="checkbox"><span>Уточнить у поддержки Kaspi сроки модерации карточек</span></label>
+    <label class="rv"><input type="checkbox"><span>Посмотреть комиссию Kaspi по нужной категории</span></label>
+    <label class="rv"><input type="checkbox"><span>Придумать название бренда и оформить профили</span></label>
+  </div>
+</div></section>
+
+<footer>Рабочий документ. Цены и сроки уточняются по факту, разделы обновляются каждую неделю.</footer>
+
+<script>
+const CAT=[
+ {n:"Брелки",i:[["Брелок именной","1 500 - 2 500"],["Брелок с логотипом (оптом)","1 200 - 2 000"],["Брелок-силуэт города Шымкент","1 500 - 2 500"],["Брелок по знаку зодиака","1 500 - 2 500"],["Брелок парный","2 500 - 4 000"],["Брелок-марка авто","1 800 - 3 000"],["Брелок с датой или инициалами","1 500 - 2 500"],["Брелок-медальон, 2 слоя","2 000 - 3 500"],["Брелок-ёлочка","1 500 - 2 500"],["Брелок с QR-кодом","1 800 - 3 000"]]},
+ {n:"Новый год",i:[["Ёлочная игрушка именная","1 500 - 2 500"],["Игрушка-снежинка","1 200 - 2 000"],["Игрушка 3D, слоёный шар","2 000 - 3 500"],["Подвеска-домик","1 500 - 2 500"],["Гирлянда из букв","3 500 - 6 000"],["Топпер в ёлку или горшок","1 200 - 2 000"],["Именная подарочная бирка","700 - 1 200"],["Адвент-календарь, 24 ячейки","7 000 - 12 000"],["Подставка под свечу","2 000 - 3 500"],["Открытка на фанере","1 000 - 2 000"]]},
+ {n:"Наборы",i:[["Брелок + открытка","3 500 - 6 000"],["Три именные игрушки","4 500 - 7 000"]]},
+ {n:"Ночники",i:[["Слоёный ночник Лес","8 000 - 15 000"],["Слоёный ночник Город","8 000 - 15 000"],["Ночник именной","9 000 - 15 000"],["Ночник Луна","7 000 - 12 000"],["Ночник Горы","8 000 - 15 000"],["Светильник-ёлка","6 000 - 10 000"]]},
+ {n:"Постеры и панно",i:[["Постер контурный арт","6 000 - 12 000"],["Панно карта города или страны","8 000 - 14 000"],["Постер с фразой","5 000 - 9 000"],["Панно семейное дерево","7 000 - 12 000"],["Панно по авторскому миру","8 000 - 15 000"]]},
+ {n:"Дом",i:[["Мини-сундучок","5 000 - 9 000"],["Подставка под телефон","2 000 - 3 500"],["Органайзер для ручек","3 000 - 5 000"],["Подставка под кружку","1 500 - 2 500"],["Ключница настенная","4 000 - 7 000"],["Коробка для чая","4 000 - 7 000"],["Шкатулка с гравировкой","5 000 - 9 000"]]},
+ {n:"Сборные модели",i:[["Модульная башня","5 000 - 9 000"],["Мини-замок","7 000 - 12 000"],["Мельница","5 000 - 9 000"],["Мост","4 000 - 7 000"]]},
+ {n:"С Pinduoduo",i:[["LED-основания для ночников","Комплектующее"],["USB-шнуры с выключателем","Комплектующее"],["Кольца и цепочки для брелков","Комплектующее"],["Шнурки и ленты для игрушек","Комплектующее"],["Крафт-коробки подарочные","Упаковка"],["LED-гирлянды","Перепродажа"],["Готовые светильники (ниша)","Проверка спроса"],["Готовые новогодние игрушки и декор","Проверка спроса"]]}
+];
+const all=CAT.flatMap(c=>c.i.map(x=>[...x,c.n]));
+// tabs
+const tabs=document.getElementById('tabs'),items=document.getElementById('items');
+function show(k){
+  [...tabs.children].forEach((b,i)=>b.classList.toggle('on',i===k));
+  const list=k===0?all:CAT[k-1].i.map(x=>[...x,CAT[k-1].n]);
+  items.innerHTML=list.map((x,j)=>`<div class="item" style="animation-delay:${Math.min(j,20)*25}ms"><div><small>${x[2].toUpperCase()}</small><b>${x[0]}</b></div><em>${x[1]}${/\d/.test(x[1])?' тг':''}</em></div>`).join('');
+}
+['Все ('+all.length+')',...CAT.map(c=>c.n)].forEach((t,k)=>{const b=document.createElement('button');b.textContent=t;b.onclick=()=>show(k);tabs.appendChild(b)});
+show(0);
+// marquee
+const names=all.map(x=>x[0]);document.getElementById('mq').innerHTML=[...names,...names].map(n=>`<span>${n}</span>`).join('');
+// reveal
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.rv').forEach((el,i)=>{el.style.transitionDelay=(i%4)*70+'ms';io.observe(el)});
+// timeline dots follow
+const wio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{rootMargin:'-40% 0px -40% 0px'});
+document.querySelectorAll('.wk').forEach(w=>wio.observe(w));
+// counters
+const cio=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;cio.unobserve(e.target);const t=+e.target.dataset.n;let s=null;
+  const step=ts=>{s=s||ts;const p=Math.min((ts-s)/1200,1);e.target.textContent=Math.round(t*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step)}),{threshold:.5});
+document.querySelectorAll('[data-n]').forEach(el=>cio.observe(el));
+// progress, timeline fill, nav highlight
+const bar=document.getElementById('bar'),tl=document.getElementById('tl'),fill=document.getElementById('fill');
+const links=[...document.querySelectorAll('nav a')],secs=links.map(a=>document.querySelector(a.getAttribute('href')));
+function onScroll(){
+  const h=document.documentElement;bar.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
+  const r=tl.getBoundingClientRect(),p=Math.min(Math.max((innerHeight*.55-r.top)/r.height,0),1);fill.style.height=`calc(${p*100}% - 16px)`;
+  let cur=0;secs.forEach((s,i)=>{if(s&&s.getBoundingClientRect().top<innerHeight*.35)cur=i});
+  links.forEach((a,i)=>a.classList.toggle('on',i===cur));
+}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+</script>
+</body>
+</html>
